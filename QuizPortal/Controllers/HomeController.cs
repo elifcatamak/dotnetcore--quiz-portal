@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QuizPortal.Helper;
 using QuizPortal.Models;
 
 namespace QuizPortal.Controllers
@@ -16,11 +18,11 @@ namespace QuizPortal.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
+            if(HttpContext.Session.GetString(Constants.SessionUserId) == null)
+            {
+                return Redirect(Url.Action("Login", "User"));
+            }
 
-        public IActionResult Privacy()
-        {
             return View();
         }
 

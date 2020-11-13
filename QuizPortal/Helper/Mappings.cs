@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using QuizPortal.Models;
 using QuizPortal.Models.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuizPortal.Helper
 {
@@ -12,7 +8,7 @@ namespace QuizPortal.Helper
     {
         public Mappings()
         {
-            CreateMap<UserCreateDto, User>().ReverseMap();
+            CreateMap<UserDto, User>().ReverseMap();
         }
     }
 }

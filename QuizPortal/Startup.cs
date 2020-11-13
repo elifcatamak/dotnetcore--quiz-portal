@@ -9,6 +9,7 @@ using QuizPortal.Data;
 using QuizPortal.Helper;
 using QuizPortal.Repositories;
 using QuizPortal.Repositories.Sqlite;
+using System;
 
 namespace QuizPortal
 {
@@ -32,6 +33,15 @@ namespace QuizPortal
 
             services.AddAutoMapper(typeof(Mappings));
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
@@ -51,6 +61,12 @@ namespace QuizPortal
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(u => u.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+
+            app.UseSession();
 
             app.UseAuthorization();
 

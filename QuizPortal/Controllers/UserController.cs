@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QuizPortal.Helper;
 using QuizPortal.Models;
 using QuizPortal.Models.Dtos;
 using QuizPortal.Repositories;
@@ -24,12 +23,16 @@ namespace QuizPortal.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (HttpContext.Session.GetString(Constants.SessionUserId) != null)
+            {
+                return Redirect(Url.Action("Index", "Home"));
+            }
+
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Register(UserCreateDto userCreateDto)
+        public async Task<IActionResult> Register(UserDto userDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,12 +41,12 @@ namespace QuizPortal.Controllers
 
             IUserRepository userRepository = _repositoryFactory.GetUserRepository();
 
-            if (await userRepository.UserExistsAsync(userCreateDto.Username))
+            if (await userRepository.UserExistsAsync(userDto.Username))
             {
-                return Json(new { success = false, message = $"User Already Exists: {userCreateDto.Username}" });
+                return Json(new { success = false, message = $"User Already Exists: {userDto.Username}" });
             }
 
-            User user = _mapper.Map<User>(userCreateDto);
+            User user = _mapper.Map<User>(userDto);
 
             await userRepository.CreateUserAsync(user);
             await _repositoryFactory.SaveAsync();
@@ -51,10 +54,45 @@ namespace QuizPortal.Controllers
             return Json(new { success = true, message = "Register successful", url = Url.Action("Login", "User") });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Login(UserDto userDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "User login validation failed" });
+            }
+
+            IUserRepository userRepository = _repositoryFactory.GetUserRepository();
+
+            if (!await userRepository.UserExistsAsync(userDto.Username, userDto.Password))
+            {
+                return Json(new { success = false, message = "Username or password is incorrect" });
+            }
+
+            var userFromDb = await userRepository.GetUserAsync(userDto.Username);
+
+            HttpContext.Session.SetString(Constants.SessionUserId, userFromDb.Id.ToString());
+
+            return Json(new { success = true, message = "Login successful", url = Url.Action("Index", "Home") });
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetString(Constants.SessionUserId) != null)
+            {
+                return Redirect(Url.Action("Index", "Home"));
+            }
+
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove(Constants.SessionUserId);
+
+            return Redirect(Url.Action("Login", "User"));
         }
     }
 }

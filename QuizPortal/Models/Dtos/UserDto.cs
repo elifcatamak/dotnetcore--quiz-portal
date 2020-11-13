@@ -2,7 +2,7 @@
 
 namespace QuizPortal.Models.Dtos
 {
-    public class UserCreateDto
+    public class UserDto
     {
         [Required]
         [StringLength(20, MinimumLength = 5)]

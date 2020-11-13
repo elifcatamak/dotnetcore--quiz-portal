@@ -1,5 +1,47 @@
-﻿@{
+﻿@model QuizPortal.Models.Dtos.UserDto
+@{
     ViewData["Title"] = "Login";
 }
 
-<h1>LOGIN</h1>
+<br />
+<h2 class="text-info">LOGIN</h2>
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form id="loginForm" method="post" asp-action="Login">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Username"></label>
+            </div>
+
+            <div class="col-6">
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Password"></label>
+            </div>
+
+            <div class="col-6">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-6">
+                <button type="button" onclick="Login();" class="btn btn-primary form-control">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/User.js"></script>
+}

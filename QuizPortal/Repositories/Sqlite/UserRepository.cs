@@ -28,5 +28,10 @@ namespace QuizPortal.Repositories.Sqlite
         {
             return await _db.Users.AnyAsync(u => u.Username == username);
         }
+
+        public async Task<bool> UserExistsAsync(string username, string password)
+        {
+            return await _db.Users.AnyAsync(u => u.Username == username && u.Password == password);
+        }
     }
 }
