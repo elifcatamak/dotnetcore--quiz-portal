@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using QuizPortal.Data;
 using QuizPortal.Helper;
+using QuizPortal.Proxies;
 using QuizPortal.Repositories;
 using QuizPortal.Repositories.Sqlite;
 using System;
@@ -30,6 +31,7 @@ namespace QuizPortal
                 );
 
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+            services.AddScoped<IWiredProxy, WiredProxy>();
 
             services.AddAutoMapper(typeof(Mappings));
 

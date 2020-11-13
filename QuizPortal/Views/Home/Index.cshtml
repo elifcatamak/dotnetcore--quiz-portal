@@ -1,7 +1,37 @@
-﻿@{
+﻿@model QuizPortal.Models.Dtos.QuizFormDto
+@{
     ViewData["Title"] = "Home";
 }
 
+<br />
+
 <div class="text-center">
-    <h1 class="display-4">Wired News</h1>
+    <h1 class="display-4">Create Your Quiz</h1>
 </div>
+
+<br />
+<br />
+
+<div class="container" style="padding:30px;">
+    <div class="col-8 offset-2">
+        @Html.DropDownListFor(m => m.SelectedArticleId,
+                                new SelectList(Model.ArticleList, "Guid", "Title"),
+                                "Select Article",
+                                new { @class = "form-control", @id = "articleDropDown" })
+    </div>
+</div>
+
+<div id="articleDesc" class="container col-8 offset-2" style="padding:30px;"></div>
+
+<div class="border container" style="padding:30px; visibility:hidden">
+    @foreach (var a in Model.ArticleList)
+    {
+        <p id="@a.Guid">@a.Description</p>
+    }
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Home.js"></script>
+}
+

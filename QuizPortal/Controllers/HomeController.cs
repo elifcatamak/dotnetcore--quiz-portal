@@ -1,29 +1,36 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using QuizPortal.Helper;
 using QuizPortal.Models;
+using QuizPortal.Models.Dtos;
+using QuizPortal.Proxies;
 
 namespace QuizPortal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IWiredProxy _wiredProxy;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IWiredProxy wiredProxy)
         {
-            _logger = logger;
+            _wiredProxy = wiredProxy;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if(HttpContext.Session.GetString(Constants.SessionUserId) == null)
             {
                 return Redirect(Url.Action("Login", "User"));
             }
 
-            return View();
+            var articleList = await _wiredProxy.GetLastFiveArticlesAsync();
+
+            var quizFormDto = new QuizFormDto();
+            quizFormDto.ArticleList = articleList;
+
+            return View(quizFormDto);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
