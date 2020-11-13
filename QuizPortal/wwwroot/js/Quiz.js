@@ -12,6 +12,6 @@
 
         console.log(desc);
 
-        $('#articleDesc').append("<p class='border' style='padding:30px'>" + desc + "</p>");
+        $('#articleDesc').append("<p class='border bg-light' style='padding:30px; border-radius:20px;'>" + desc + "</p>");
     });
 });
