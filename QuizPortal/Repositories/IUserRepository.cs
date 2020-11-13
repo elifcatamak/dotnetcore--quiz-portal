@@ -9,6 +9,8 @@ namespace QuizPortal.Repositories
 
         Task<User> GetUserAsync(string username);
 
+        Task<User> GetUserAsync(int id);
+
         Task<bool> UserExistsAsync(string username);
 
         Task<bool> UserExistsAsync(string username, string password);

@@ -10,8 +10,8 @@
             if (data.success) {
                 toastr.success(data.message,"",
                     {
-                        timeOut: 1000,
-                        fadeOut: 1000,
+                        timeOut: 250,
+                        fadeOut: 250,
                         onHidden: function(){
                             window.location = data.url;
                         }

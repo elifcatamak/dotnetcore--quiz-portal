@@ -23,24 +23,39 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("SessionUserId") == null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <div class="row col-6">
+                        <ul id="leftNav" class="navbar-nav">
+                            @if (HttpContextAccessor.HttpContext.Session.GetString("SessionUserId") == null)
+                            {
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="CreateQuiz">Create Quiz</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="row col-6 flex-sm-row-reverse">
+                        <ul id="rightNav" class="navbar-nav" style="align-items:end">
+                            @if (HttpContextAccessor.HttpContext.Session.GetString("SessionUserId") == null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

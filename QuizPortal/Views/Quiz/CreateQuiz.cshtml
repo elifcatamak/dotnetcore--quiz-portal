@@ -1,0 +1,133 @@
+﻿@model QuizPortal.Models.Dtos.QuizFormDto
+@{
+    ViewData["Title"] = "Create Quiz";
+}
+
+<br />
+
+<div class="text-center">
+    <h1 class="display-4">Create Your Quiz</h1>
+</div>
+
+<br />
+<br />
+
+<div class="container" style="padding:30px;">
+    <div class="col-8 offset-2">
+        @Html.DropDownListFor(m => m.SelectedArticleId,
+                                new SelectList(Model.ArticleList, "Guid", "Title"),
+                                "-- Select Article --",
+                                new { @class = "form-control", @id = "articleDropDown" })
+    </div>
+</div>
+
+<div id="articleDesc" class="container col-8 offset-2" style="padding:30px;"></div>
+
+<br />
+
+<div id="questionSection" class="container">
+    @for (int i = 0; i < Model.QuestionArr.Length; i++)
+    {
+        <div class="border container" style="padding:30px;">
+            <div id="question+@i">
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label>Question @(i+1):</label>
+                    </div>
+
+                    <div class="col-10">
+                        <input class="form-control" asp-for="QuestionArr[i].QuestionText" />
+                    </div>
+                </div>
+
+                <br /><br />
+
+                <div class="form-group row">
+                    <div class="col-1"></div>
+
+                    <div class="col-1" style="text-align:right">
+                        <label>A) </label>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-control" asp-for="QuestionArr[i].AnswerA" />
+                    </div>
+
+                    <div class="col-1"></div>
+
+                    <div class="col-1" style="text-align:right">
+                        <label>B) </label>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-control" asp-for="QuestionArr[i].AnswerB" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-1"></div>
+
+                    <div class="col-1" style="text-align:right">
+                        <label>C) </label>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-control" asp-for="QuestionArr[i].AnswerC" />
+                    </div>
+
+                    <div class="col-1"></div>
+
+                    <div class="col-1" style="text-align:right">
+                        <label>D) </label>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-control" asp-for="QuestionArr[i].AnswerD" />
+                    </div>
+                </div>
+
+                <br /><br />
+
+                <div class="form-group row">
+                    <div class="col-3 offset-5" style="text-align:right">
+                        <label>Select the correct answer: </label>
+                    </div>
+
+                    <div class="col-4">
+                        @Html.DropDownListFor(m => m.QuestionArr[i].CorrectAnswer,
+                                                new SelectList(new List<KeyValuePair<int, string>> {
+                                                    new KeyValuePair<int, string> (1, "A"),
+                                                    new KeyValuePair<int, string> (2, "B"),
+                                                    new KeyValuePair<int, string> (3, "C"),
+                                                    new KeyValuePair<int, string> (4, "D")
+                                                }, "Key", "Value"),
+                                                "-- Correct Answer --",
+                                                new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br /><br /><br />
+    }
+
+    <br />
+
+    <div class="form-group row">
+        <div class="col-4 offset-4">
+            <button type="button" onclick="SubmitQuiz();" class="btn btn-primary form-control">Submit Quiz</button>
+        </div>
+    </div>
+</div>
+
+<div class="border container" style="padding:30px; visibility:hidden">
+    @foreach (var a in Model.ArticleList)
+    {
+        <p id="@a.Guid">@a.Description</p>
+    }
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Quiz.js"></script>
+}

@@ -1,36 +1,42 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizPortal.Helper;
 using QuizPortal.Models;
 using QuizPortal.Models.Dtos;
-using QuizPortal.Proxies;
+using QuizPortal.Repositories;
 
 namespace QuizPortal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IWiredProxy _wiredProxy;
+        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IMapper _mapper;
 
-        public HomeController(IWiredProxy wiredProxy)
+        public HomeController(IRepositoryFactory repositoryFactory, IMapper mapper)
         {
-            _wiredProxy = wiredProxy;
+            _repositoryFactory = repositoryFactory;
+            _mapper = mapper;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if(HttpContext.Session.GetString(Constants.SessionUserId) == null)
+            var userId = HttpContext.Session.GetString(Constants.SessionUserId);
+
+            if (userId == null)
             {
                 return Redirect(Url.Action("Login", "User"));
             }
 
-            var articleList = await _wiredProxy.GetLastFiveArticlesAsync();
+            var userRepository = _repositoryFactory.GetUserRepository();
+            var userFromdb = await userRepository.GetUserAsync(int.Parse(userId));
 
-            var quizFormDto = new QuizFormDto();
-            quizFormDto.ArticleList = articleList;
+            var userDto = _mapper.Map<UserDto>(userFromdb);
 
-            return View(quizFormDto);
+            return View(userDto);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
