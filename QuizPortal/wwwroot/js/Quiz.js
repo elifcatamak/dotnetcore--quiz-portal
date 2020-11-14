@@ -3,12 +3,12 @@
 
         $('#articleDesc').empty();
 
-        var selectedGuid = $(this).val();
+        var selectedArticleId = $(this).val();
 
-        if (selectedGuid == "")
+        if (selectedArticleId == "")
             return;
 
-        var desc = $('#' + selectedGuid).text();
+        var desc = $('#' + selectedArticleId).text();
 
         console.log(desc);
 
@@ -30,13 +30,13 @@ function loadDataTable() {
         "columns": [
             { "data": null},
             { "data": "title",
-                "render": function (data) {
-                    return `<a href="" style="cursor:pointer; width: 120px;">
+                "render": function (data, type, row, meta) {
+                    return `<a href="/quiz/quiz?id=${row.id}" style="cursor:pointer; width: 120px;">
                                 ${data}
                             </a>`
                 },
                 "width": "40%" },
-            { "data": "guid", "width": "20%" },
+            { "data": "articleId", "width": "20%" },
             { "data": "createdStr", "width": "20%" },
             {
                 "data": "id",
@@ -102,4 +102,14 @@ function Delete(deleteUrl) {
             });
         }
     });
+}
+
+function answerOnClick(questionIndex, answer) {
+    var elemList = document.getElementsByClassName("custom+" + questionIndex);
+
+    for (var i=0; i<elemList.length; i++) {
+        elemList[i].classList.remove("btn-warning");
+    }
+
+    document.getElementById("question+" + questionIndex + '+' + answer).classList.add("btn-warning");
 }

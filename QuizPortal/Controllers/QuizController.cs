@@ -26,7 +26,7 @@ namespace QuizPortal.Controllers
         }
 
         [BindProperty]
-        public QuizFormDto QuizFormDto { get; set; }
+        public CreateQuizViewDto CreateQuizViewDto { get; set; }
 
         public async Task<IActionResult> CreateQuiz()
         {
@@ -37,30 +37,30 @@ namespace QuizPortal.Controllers
 
             var articleList = await _wiredProxy.GetLastFiveArticlesAsync();
 
-            QuizFormDto = new QuizFormDto();
-            QuizFormDto.ArticleList = articleList.ToList();
+            CreateQuizViewDto = new CreateQuizViewDto();
+            CreateQuizViewDto.ArticleList = articleList.ToList();
 
-            return View(QuizFormDto);
+            return View(CreateQuizViewDto);
         }
 
         [HttpPost]
         [ActionName("CreateQuiz")]
         public async Task<IActionResult> CreateQuizPost()
         {
-            QuizFormDto.ErrorMessage = null;
+            CreateQuizViewDto.ErrorMessage = null;
 
             if (ModelState.IsValid)
             {
                 // Distinct question control
-                if (QuizFormDto.QuestionArr.Select(q => q.QuestionText).Distinct().Count() != 4)
+                if (CreateQuizViewDto.QuestionArr.Select(q => q.QuestionText).Distinct().Count() != 4)
                 {
-                    QuizFormDto.ErrorMessage = "Questions should be unique";
+                    CreateQuizViewDto.ErrorMessage = "Questions should be unique";
 
-                    return View(QuizFormDto);
+                    return View(CreateQuizViewDto);
                 }
 
                 //Distinct answers control
-                foreach(var q in QuizFormDto.QuestionArr)
+                foreach(var q in CreateQuizViewDto.QuestionArr)
                 {
                     if(q.AnswerA == q.AnswerB ||
                         q.AnswerA == q.AnswerC ||
@@ -69,9 +69,9 @@ namespace QuizPortal.Controllers
                         q.AnswerB == q.AnswerD ||
                         q.AnswerC == q.AnswerD)
                     {
-                        QuizFormDto.ErrorMessage = "A question cannot have the same answer more than once";
+                        CreateQuizViewDto.ErrorMessage = "A question cannot have the same answer more than once";
 
-                        return View(QuizFormDto);
+                        return View(CreateQuizViewDto);
                     }
                 }
 
@@ -79,11 +79,11 @@ namespace QuizPortal.Controllers
 
                 var quizRepository = _repositoryFactory.GetQuizRepository();
 
-                var selectedArt = QuizFormDto.ArticleList.FirstOrDefault(a => a.Guid == QuizFormDto.SelectedArticleId);
+                var selectedArt = CreateQuizViewDto.ArticleList.FirstOrDefault(a => a.ArticleId == CreateQuizViewDto.SelectedArticleId);
 
                 if (selectedArt == null)
                 {
-                    return View(QuizFormDto);
+                    return View(CreateQuizViewDto);
                 }
 
                 var quiz = _mapper.Map<Quiz>(selectedArt);
@@ -93,7 +93,7 @@ namespace QuizPortal.Controllers
 
                 var questionRepository = _repositoryFactory.GetQuestionRepository();
 
-                foreach (var item in QuizFormDto.QuestionArr)
+                foreach (var item in CreateQuizViewDto.QuestionArr)
                 {
                     var ques = _mapper.Map<Question>(item);
                     ques.QuizId = quiz.Id;
@@ -108,7 +108,7 @@ namespace QuizPortal.Controllers
                 return RedirectToAction("Index", "Quiz");
             }
 
-            return View(QuizFormDto);
+            return View(CreateQuizViewDto);
         }
 
         [HttpGet]
@@ -150,6 +150,38 @@ namespace QuizPortal.Controllers
             await _repositoryFactory.SaveAsync();
 
             return Json(new { success = true, message = "Delete successful" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Quiz(int id)
+        {
+            if (HttpContext.Session.GetString(Constants.SessionUserId) == null)
+            {
+                return Redirect(Url.Action("Login", "User"));
+            }
+
+            var quizRepository = _repositoryFactory.GetQuizRepository();
+            var questionRepository = _repositoryFactory.GetQuestionRepository();
+
+            var quizFromDb = await quizRepository.GetQuizAsync(id);
+
+            // If quiz does not exist
+            if(quizFromDb == null)
+            {
+                return Redirect(Url.Action("Index", "Quiz"));
+            }
+
+            var questionList = await questionRepository.GetAllQuestionsAsync(id);
+
+            var quizDto = _mapper.Map<QuizDto>(quizFromDb);
+            var questionDtoList = _mapper.Map<List<QuestionDto>>(questionList);
+
+            var quizViewDto = new QuizViewDto();
+
+            quizViewDto.QuizDto = quizDto;
+            quizViewDto.QuestionDtoList = questionDtoList;
+
+            return View(quizViewDto);
         }
     }
 }

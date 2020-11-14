@@ -25,7 +25,7 @@ namespace QuizPortal.Proxies
             {
                 var articleDto = new ArticleDto();
 
-                articleDto.Guid = item.Id;
+                articleDto.ArticleId = item.Id;
                 articleDto.Title = item.Title.Text;
                 articleDto.Description = item.Summary.Text;
 

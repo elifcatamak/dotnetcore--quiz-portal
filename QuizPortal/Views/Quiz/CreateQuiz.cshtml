@@ -1,4 +1,4 @@
-﻿@model QuizPortal.Models.Dtos.QuizFormDto
+﻿@model QuizPortal.Models.Dtos.CreateQuizViewDto
 @{
     ViewData["Title"] = "Create Quiz";
 }
@@ -15,7 +15,7 @@
 <form method="post" asp-action="CreateQuiz">
     @for (int i = 0; i < Model.ArticleList.Count; i++)
     {
-        <input type="hidden" asp-for="ArticleList[i].Guid" />
+        <input type="hidden" asp-for="ArticleList[i].ArticleId" />
         <input type="hidden" asp-for="ArticleList[i].Title" />
         <input type="hidden" asp-for="ArticleList[i].Description" />
     }
@@ -27,7 +27,7 @@
 
         <div class="col-8">
             @Html.DropDownListFor(m => m.SelectedArticleId,
-                                    new SelectList(Model.ArticleList, "Guid", "Title"),
+                                    new SelectList(Model.ArticleList, "ArticleId", "Title"),
                                     "-- Select Article --",
                                     new { @class = "form-control", @id = "articleDropDown" })
 
@@ -153,7 +153,7 @@
 <div class="border container" style="padding:30px; visibility:hidden">
     @foreach (var a in Model.ArticleList)
     {
-        <p id="@a.Guid">@a.Description</p>
+        <p id="@a.ArticleId">@a.Description</p>
     }
 </div>
 

@@ -11,12 +11,16 @@ namespace QuizPortal.Models.Dtos
         public int Id { get; set; }
 
         [Required]
+        public string ArticleId { get; set; }
+
+        [Required]
         public string Title { get; set; }
+
+        [Required]
+        public string Description { get; set; }
 
         public DateTime Created { get; set; }
 
         public string CreatedStr { get { return Created.ToString("yyyy-MM-dd"); } }
-
-        public string Guid { get; set; }
     }
 }

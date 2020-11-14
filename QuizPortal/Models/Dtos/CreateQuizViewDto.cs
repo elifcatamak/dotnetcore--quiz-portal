@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuizPortal.Models.Dtos
 {
-    public class QuizFormDto
+    public class CreateQuizViewDto
     {
         [Required]
         public List<ArticleDto> ArticleList { get; set; }

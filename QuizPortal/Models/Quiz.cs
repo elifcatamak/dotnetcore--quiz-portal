@@ -11,10 +11,14 @@ namespace QuizPortal.Models
         public int Id { get; set; }
 
         [Required]
+        public string ArticleId { get; set; }
+
+        [Required]
         public string Title { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        [Required]
+        public string Description { get; set; }
 
-        public string Guid { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }
