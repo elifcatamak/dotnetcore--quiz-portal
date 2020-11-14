@@ -9,6 +9,9 @@ namespace QuizPortal.Helper
         public Mappings()
         {
             CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<ArticleDto, Quiz>().ReverseMap();
+            CreateMap<QuestionDto, Question>().ReverseMap();
+            CreateMap<QuizDto, Quiz>().ReverseMap();
         }
     }
 }

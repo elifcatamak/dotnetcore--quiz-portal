@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Quizzes";
+}
+
+<br />
+
+<div class="text-center">
+    <h1 class="display-4">Quizzes</h1>
+</div>
+
+<br />
+<br />
+
+<div class="col-12 border bg-light" style="border-radius:20px; padding:30px;">
+    <table id="quizListTable" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Guid</th>
+                <th>Create Date</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/Quiz.js"></script>
+}

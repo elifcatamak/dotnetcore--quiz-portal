@@ -9,8 +9,8 @@ using QuizPortal.Data;
 namespace QuizPortal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201113183747_CreateQuestionsAndQuizzesTables")]
-    partial class CreateQuestionsAndQuizzesTables
+    [Migration("20201114043538_CreateTables")]
+    partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,8 @@ namespace QuizPortal.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuizId");
+
                     b.ToTable("Questions");
                 });
 
@@ -61,14 +63,11 @@ namespace QuizPortal.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ArticleGuid")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Guid")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -107,6 +106,17 @@ namespace QuizPortal.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("QuizPortal.Models.Question", b =>
+                {
+                    b.HasOne("QuizPortal.Models.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
                 });
 #pragma warning restore 612, 618
         }

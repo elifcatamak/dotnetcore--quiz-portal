@@ -15,6 +15,10 @@ namespace QuizPortal.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Question>().HasOne(e => e.Quiz)
+                                            .WithMany()
+                                            .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
 
             base.OnModelCreating(modelBuilder);

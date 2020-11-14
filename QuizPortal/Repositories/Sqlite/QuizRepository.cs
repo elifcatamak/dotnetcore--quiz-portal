@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizPortal.Data;
 using QuizPortal.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace QuizPortal.Repositories.Sqlite
@@ -22,6 +23,16 @@ namespace QuizPortal.Repositories.Sqlite
         public async Task<Quiz> GetQuizAsync(int id)
         {
             return await _db.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
+        }
+
+        public async Task<ICollection<Quiz>> GetAllQuizzesAsync()
+        {
+            return await _db.Quizzes.ToListAsync();
+        }
+
+        public void DeleteQuiz(Quiz quiz)
+        {
+            _db.Quizzes.Remove(quiz);
         }
     }
 }

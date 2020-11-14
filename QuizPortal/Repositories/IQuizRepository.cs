@@ -1,4 +1,5 @@
 ﻿using QuizPortal.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace QuizPortal.Repositories
@@ -8,5 +9,9 @@ namespace QuizPortal.Repositories
         Task CreateQuizAsync(Quiz quiz);
 
         Task<Quiz> GetQuizAsync(int id);
+
+        Task<ICollection<Quiz>> GetAllQuizzesAsync();
+
+        void DeleteQuiz(Quiz quiz);
     }
 }

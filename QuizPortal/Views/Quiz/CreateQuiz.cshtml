@@ -20,9 +20,12 @@
         <input type="hidden" asp-for="ArticleList[i].Description" />
     }
 
+    <div class="container row offset-1" style="padding:20px;">
+        <div class="col-1">
+            <label>Article:</label>
+        </div>
 
-    <div class="container" style="padding:30px;">
-        <div class="col-8 offset-2">
+        <div class="col-8">
             @Html.DropDownListFor(m => m.SelectedArticleId,
                                     new SelectList(Model.ArticleList, "Guid", "Title"),
                                     "-- Select Article --",
@@ -35,11 +38,11 @@
 
     <br />
 
-    @if(Model.ErrorMessage != null)
+    @if (Model.ErrorMessage != null)
     {
-    <div class="border container bg-danger col-6 offset-3" style="padding:30px; border-radius:20px;">
-        <p style="text-align:center; color:white;">@Model.ErrorMessage</p>
-    </div>
+        <div class="border container bg-danger col-6 offset-3" style="padding:30px; border-radius:20px;">
+            <p style="text-align:center; color:white;">@Model.ErrorMessage</p>
+        </div>
     }
 
     <br />

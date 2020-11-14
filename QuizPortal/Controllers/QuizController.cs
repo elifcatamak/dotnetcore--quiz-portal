@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizPortal.Helper;
@@ -14,11 +16,13 @@ namespace QuizPortal.Controllers
     {
         private readonly IWiredProxy _wiredProxy;
         private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IMapper _mapper;
 
-        public QuizController(IWiredProxy wiredProxy, IRepositoryFactory repositoryFactory)
+        public QuizController(IWiredProxy wiredProxy, IRepositoryFactory repositoryFactory, IMapper mapper)
         {
             _wiredProxy = wiredProxy;
             _repositoryFactory = repositoryFactory;
+            _mapper = mapper;
         }
 
         [BindProperty]
@@ -82,10 +86,7 @@ namespace QuizPortal.Controllers
                     return View(QuizFormDto);
                 }
 
-                var quiz = new Quiz();
-
-                quiz.Title = selectedArt.Title;
-                quiz.ArticleGuid = selectedArt.Guid;
+                var quiz = _mapper.Map<Quiz>(selectedArt);
 
                 await quizRepository.CreateQuizAsync(quiz);
                 await _repositoryFactory.SaveAsync();
@@ -94,14 +95,7 @@ namespace QuizPortal.Controllers
 
                 foreach (var item in QuizFormDto.QuestionArr)
                 {
-                    var ques = new Question();
-
-                    ques.QuestionText = item.QuestionText;
-                    ques.AnswerA = item.AnswerA;
-                    ques.AnswerB = item.AnswerB;
-                    ques.AnswerC = item.AnswerC;
-                    ques.AnswerD = item.AnswerD;
-                    ques.CorrectAnswer = item.CorrectAnswer;
+                    var ques = _mapper.Map<Question>(item);
                     ques.QuizId = quiz.Id;
 
                     await questionRepository.CreateQuestionAsync(ques);
@@ -111,10 +105,51 @@ namespace QuizPortal.Controllers
 
                 transaction.Commit();
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Quiz");
             }
 
             return View(QuizFormDto);
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            if (HttpContext.Session.GetString(Constants.SessionUserId) == null)
+            {
+                return Redirect(Url.Action("Login", "User"));
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllQuizzes()
+        {
+            var quizRepository = _repositoryFactory.GetQuizRepository();
+
+            var quizList = await quizRepository.GetAllQuizzesAsync();
+
+            var quizDtoList = _mapper.Map<List<QuizDto>>(quizList.ToList());
+
+            return Json(new { data = quizDtoList });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var quizRepository = _repositoryFactory.GetQuizRepository();
+
+            var quizFromDb = await quizRepository.GetQuizAsync(id);
+
+            if (quizFromDb == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            quizRepository.DeleteQuiz(quizFromDb);
+            await _repositoryFactory.SaveAsync();
+
+            return Json(new { success = true, message = "Delete successful" });
         }
     }
 }

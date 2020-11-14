@@ -9,7 +9,10 @@ namespace QuizPortal.Models
         [Key]
         public int Id { get; set; }
 
+        public Quiz Quiz { get; set; }
+
         [ForeignKey("Quiz")]
+        [Required]
         public int QuizId { get; set; }
 
         [Required]
