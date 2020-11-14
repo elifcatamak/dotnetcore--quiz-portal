@@ -15,6 +15,8 @@ namespace QuizPortal.Models.Dtos
 
         public DateTime Created { get; set; }
 
+        public string CreatedStr { get { return Created.ToString("yyyy-MM-dd"); } }
+
         public string Guid { get; set; }
     }
 }

@@ -12,7 +12,7 @@
 
         console.log(desc);
 
-        $('#articleDesc').append("<p class='border bg-light' style='padding:30px; border-radius:20px;'>" + desc + "</p>");
+        $('#articleDesc').append("<p class='border bg-success text-white' style='padding:30px; border-radius:20px;'>" + desc + "</p>");
     });
 
     loadDataTable();
@@ -29,24 +29,26 @@ function loadDataTable() {
         },
         "columns": [
             { "data": null},
-            { "data": "title", "width": "30%" },
-            { "data": "guid", "width": "15%" },
-            { "data": "created", "width": "15%" },
+            { "data": "title",
+                "render": function (data) {
+                    return `<a href="" style="cursor:pointer; width: 120px;">
+                                ${data}
+                            </a>`
+                },
+                "width": "40%" },
+            { "data": "guid", "width": "20%" },
+            { "data": "createdStr", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                        <a href="" class="btn btn-info text-white" style="cursor:pointer; width: 120px;">
-                            Take Quiz
-                        </a>
-                        &nbsp;
                         <a class="btn btn-danger text-white" style="cursor:pointer; width: 120px;"
                             onclick=Delete('quiz/Delete?id=${data}')>
                             Delete
                         </a>
                     </div>`;
                 },
-                "width": "40%"
+                "width": "20%"
             }
         ],
         "language": {
