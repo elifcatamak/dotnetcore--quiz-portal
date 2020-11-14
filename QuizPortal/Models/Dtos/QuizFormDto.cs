@@ -13,5 +13,7 @@ namespace QuizPortal.Models.Dtos
 
         [Required]
         public QuestionDto[] QuestionArr { get; set; } = new QuestionDto[4];
+
+        public string ErrorMessage { get; set; }
     }
 }

@@ -35,6 +35,15 @@
 
     <br />
 
+    @if(Model.ErrorMessage != null)
+    {
+    <div class="border container bg-danger col-6 offset-3" style="padding:30px; border-radius:20px;">
+        <p style="text-align:center; color:white;">@Model.ErrorMessage</p>
+    </div>
+    }
+
+    <br />
+
     <div id="questionSection" class="container">
         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 

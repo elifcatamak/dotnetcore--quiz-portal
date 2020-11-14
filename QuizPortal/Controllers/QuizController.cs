@@ -43,15 +43,41 @@ namespace QuizPortal.Controllers
         [ActionName("CreateQuiz")]
         public async Task<IActionResult> CreateQuizPost()
         {
+            QuizFormDto.ErrorMessage = null;
+
             if (ModelState.IsValid)
             {
+                // Distinct question control
+                if (QuizFormDto.QuestionArr.Select(q => q.QuestionText).Distinct().Count() != 4)
+                {
+                    QuizFormDto.ErrorMessage = "Questions should be unique";
+
+                    return View(QuizFormDto);
+                }
+
+                //Distinct answers control
+                foreach(var q in QuizFormDto.QuestionArr)
+                {
+                    if(q.AnswerA == q.AnswerB ||
+                        q.AnswerA == q.AnswerC ||
+                        q.AnswerA == q.AnswerD ||
+                        q.AnswerB == q.AnswerC ||
+                        q.AnswerB == q.AnswerD ||
+                        q.AnswerC == q.AnswerD)
+                    {
+                        QuizFormDto.ErrorMessage = "A question cannot have the same answer more than once";
+
+                        return View(QuizFormDto);
+                    }
+                }
+
                 var transaction = await _repositoryFactory.BeginTransactionAsync();
 
                 var quizRepository = _repositoryFactory.GetQuizRepository();
 
                 var selectedArt = QuizFormDto.ArticleList.FirstOrDefault(a => a.Guid == QuizFormDto.SelectedArticleId);
 
-                if(selectedArt == null)
+                if (selectedArt == null)
                 {
                     return View(QuizFormDto);
                 }
@@ -66,7 +92,7 @@ namespace QuizPortal.Controllers
 
                 var questionRepository = _repositoryFactory.GetQuestionRepository();
 
-                foreach(var item in QuizFormDto.QuestionArr)
+                foreach (var item in QuizFormDto.QuestionArr)
                 {
                     var ques = new Question();
 
