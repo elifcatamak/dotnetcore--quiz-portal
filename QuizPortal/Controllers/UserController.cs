@@ -25,7 +25,7 @@ namespace QuizPortal.Controllers
         {
             if (HttpContext.Session.GetString(Constants.SessionUserId) != null)
             {
-                return Redirect(Url.Action("Index", "Home"));
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
@@ -81,7 +81,7 @@ namespace QuizPortal.Controllers
         {
             if (HttpContext.Session.GetString(Constants.SessionUserId) != null)
             {
-                return Redirect(Url.Action("Index", "Home"));
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
@@ -92,7 +92,7 @@ namespace QuizPortal.Controllers
         {
             HttpContext.Session.Remove(Constants.SessionUserId);
 
-            return Redirect(Url.Action("Login", "User"));
+            return RedirectToAction("Login", "User");
         }
     }
 }

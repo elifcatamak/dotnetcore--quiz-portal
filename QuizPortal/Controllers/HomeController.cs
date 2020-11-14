@@ -28,7 +28,7 @@ namespace QuizPortal.Controllers
 
             if (userId == null)
             {
-                return Redirect(Url.Action("Login", "User"));
+                return RedirectToAction("Login", "User");
             }
 
             var userRepository = _repositoryFactory.GetUserRepository();

@@ -6,7 +6,7 @@ namespace QuizPortal.Models.Dtos
     public class QuizFormDto
     {
         [Required]
-        public ICollection<ArticleDto> ArticleList { get; set; }
+        public List<ArticleDto> ArticleList { get; set; }
 
         [Required]
         public string SelectedArticleId { get; set; }
