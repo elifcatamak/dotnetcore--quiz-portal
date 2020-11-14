@@ -28,10 +28,10 @@
                 <br />
 
                 <div>
-                    <label onclick="answerOnClick(@i, 'A')" id="question+@i+A" class="form-control custom+@i">A) @Model.QuestionDtoList[i].AnswerA</label>
-                    <label onclick="answerOnClick(@i, 'B')" id="question+@i+B" class="form-control custom+@i">B) @Model.QuestionDtoList[i].AnswerB</label>
-                    <label onclick="answerOnClick(@i, 'C')" id="question+@i+C" class="form-control custom+@i">C) @Model.QuestionDtoList[i].AnswerC</label>
-                    <label onclick="answerOnClick(@i, 'D')" id="question+@i+D" class="form-control custom+@i">D) @Model.QuestionDtoList[i].AnswerD</label>
+                    <label for="A" onclick="answerOnClick(@i, 'A')" id="question+@i+A" class="form-control custom+@i">A) @Model.QuestionDtoList[i].AnswerA</label>
+                    <label for="B" onclick="answerOnClick(@i, 'B')" id="question+@i+B" class="form-control custom+@i">B) @Model.QuestionDtoList[i].AnswerB</label>
+                    <label for="C" onclick="answerOnClick(@i, 'C')" id="question+@i+C" class="form-control custom+@i">C) @Model.QuestionDtoList[i].AnswerC</label>
+                    <label for="D" onclick="answerOnClick(@i, 'D')" id="question+@i+D" class="form-control custom+@i">D) @Model.QuestionDtoList[i].AnswerD</label>
                 </div>
             </div>
         </div>
@@ -42,8 +42,15 @@
 
 <div class="form-group row">
     <div class="col-4 offset-4">
-        <button type="submit" class="btn btn-info form-control">Complete the Quiz</button>
+        <button id="completeBtn" onclick="CompleteQuiz();" class="btn btn-info form-control">Complete the Quiz</button>
     </div>
+</div>
+
+<div style="visibility:hidden">
+    @for(int i=0; i<Model.QuestionDtoList.Count; i++)
+    {
+        <input value="@Model.QuestionDtoList[i].CorrectAnswer" id="correct+@i" />
+    }
 </div>
 
 @section Scripts{

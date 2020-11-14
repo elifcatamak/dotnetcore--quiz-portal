@@ -9,7 +9,7 @@ using QuizPortal.Data;
 namespace QuizPortal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201114060220_CreateTables")]
+    [Migration("20201114083659_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +40,9 @@ namespace QuizPortal.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CorrectAnswer")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()

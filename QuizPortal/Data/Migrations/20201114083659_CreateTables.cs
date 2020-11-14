@@ -51,7 +51,7 @@ namespace QuizPortal.Data.Migrations
                     AnswerB = table.Column<string>(type: "TEXT", nullable: false),
                     AnswerC = table.Column<string>(type: "TEXT", nullable: false),
                     AnswerD = table.Column<string>(type: "TEXT", nullable: false),
-                    CorrectAnswer = table.Column<int>(type: "INTEGER", nullable: false)
+                    CorrectAnswer = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

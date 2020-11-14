@@ -19,6 +19,7 @@
 });
 
 var dataTable;
+var complete = false;
 
 function loadDataTable() {
     dataTable = $('#quizListTable').DataTable({
@@ -105,6 +106,9 @@ function Delete(deleteUrl) {
 }
 
 function answerOnClick(questionIndex, answer) {
+    if (complete == true)
+        return;
+
     var elemList = document.getElementsByClassName("custom+" + questionIndex);
 
     for (var i=0; i<elemList.length; i++) {
@@ -112,4 +116,31 @@ function answerOnClick(questionIndex, answer) {
     }
 
     document.getElementById("question+" + questionIndex + '+' + answer).classList.add("btn-warning");
+}
+
+function CompleteQuiz() {
+    var elemList = document.getElementsByClassName("btn-warning");
+
+    if (elemList.length != 4) {
+        toastr.error("Please complete the quiz");
+
+        return;
+    }
+
+    for (var i=3; i>=0; i--) {
+        var correctAnswer = document.getElementById('correct+' + i).value;
+        var givenAnswer = elemList[i].getAttribute("for");
+
+        if (givenAnswer == correctAnswer) {     
+            elemList[i].classList.add("btn-success");
+        }
+        else {
+            elemList[i].classList.add("btn-danger");
+        }
+
+        elemList[i].classList.remove("btn-warning");
+    }
+
+    complete = true;
+    document.getElementById("completeBtn").style.visibility = "hidden";
 }

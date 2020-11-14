@@ -38,8 +38,9 @@ namespace QuizPortal.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CorrectAnswer")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()

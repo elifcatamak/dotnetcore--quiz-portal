@@ -124,12 +124,7 @@
 
                         <div class="col-4">
                             @Html.DropDownListFor(m => m.QuestionArr[i].CorrectAnswer,
-                                                    new SelectList(new List<KeyValuePair<int, string>> {
-                                                        new KeyValuePair<int, string> (1, "A"),
-                                                        new KeyValuePair<int, string> (2, "B"),
-                                                        new KeyValuePair<int, string> (3, "C"),
-                                                        new KeyValuePair<int, string> (4, "D")
-                                                    }, "Key", "Value"),
+                                                    new SelectList(new List<string> { "A", "B", "C", "D" }),
                                                     "-- Correct Answer --",
                                                     new { @class = "form-control" })
                         </div>
@@ -150,7 +145,7 @@
     </div>
 </form>
 
-<div class="border container" style="padding:30px; visibility:hidden">
+<div style="visibility:hidden">
     @foreach (var a in Model.ArticleList)
     {
         <p id="@a.ArticleId">@a.Description</p>

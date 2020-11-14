@@ -20,6 +20,6 @@ namespace QuizPortal.Models.Dtos
         public string AnswerD { get; set; }
 
         [Required]
-        public int CorrectAnswer { get; set; }
+        public string CorrectAnswer { get; set; }
     }
 }
